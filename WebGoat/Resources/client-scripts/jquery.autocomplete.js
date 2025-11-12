@@ -63,7 +63,8 @@
 
       var me, uid, autocompleteElId;
       me = this;
-      uid = Math.floor(Math.random()*0x100000).toString(16);
+      // generate a 4-digit hex uid (matches the old length)
+      uid = secureUid(4);
       autocompleteElId = 'Autocomplete_' + uid;
 
       this.killerFn = function(e) {
