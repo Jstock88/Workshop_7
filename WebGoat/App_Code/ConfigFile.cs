@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace OWASP.WebGoat.NET.App_Code
 {
@@ -58,9 +59,8 @@ namespace OWASP.WebGoat.NET.App_Code
         {
             using (FileStream stream = File.Create(_filePath))
             {
-                byte[] data = ToByteArray();
-                
-                stream.Write(data, 0, data.Length);
+                byte[] hash = SHA256.HashData(data);
+                stream.Write(hash, 0, hash.Length);
             }
         }
             
