@@ -13,6 +13,22 @@ namespace OWASP.WebGoat.NET.App_Code
         
         public static int RunProcessWithInput(string cmd, string args, string input)
         {
+            // Only allow known safe client executables
+            var allowedExecutables = new[] { "sqlite3", "/usr/bin/sqlite3", "C:\\sqlite3\\sqlite3.exe" };
+            bool allowed = false;
+            foreach (var allowedExec in allowedExecutables)
+            {
+                if (string.Equals(cmd, allowedExec, StringComparison.OrdinalIgnoreCase))
+                {
+                    allowed = true;
+                    break;
+                }
+            }
+            if (!allowed)
+            {
+                log.Error("Attempt to run forbidden process: " + cmd);
+                throw new InvalidOperationException("Invalid client command requested.");
+            }
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WorkingDirectory = Settings.RootDir,
